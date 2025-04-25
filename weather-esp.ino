@@ -13,7 +13,7 @@ TEMT6000 lightSensor;
 BME280 homeEnvSensor;
 BME280 extEnvSensor;
 KY003 windSpeedSensor;
-RainSensor rainSensor;
+RainSensor rainSensor(RAIN_PIN);
 
 LiquidCrystal_I2C lcd(DISPLAY_ADDRESS, 20, 4);
 
@@ -37,7 +37,7 @@ void drawInfoOutside()
   lcd.print("hpa");
   lcd.setCursor(0, 2);
   lcd.print("Wind: ");
-  lcd.print(windDirectionSensor.getWindDirection());
+  lcd.print(windDirectionSensor.getDirection());
   lcd.print(" ");
   lcd.print(windSpeedSensor.getSpeed());
   lcd.print("m/s");
@@ -79,7 +79,7 @@ void postData()
     WiFiClient client;
     HTTPClient http;
 
-    http.begin(client, serverName);
+    http.begin(client, SERVER_URL);
 
     http.addHeader("Content-Type", "application/json");
     JsonDocument doc;
@@ -125,7 +125,7 @@ void setup()
   lcd.init();
   lcd.backlight();
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   if (DEBUG)
   {
@@ -165,8 +165,8 @@ void setup()
     {
       Serial.println("Failed to initialize external BME280 sensor!");
     }
-
-    if (!windSpeedSensor.init(KY003_PIN))
+    windSpeedSensor.init(KY003_PIN);
+    if (false)
     {
       Serial.println("Failed to initialize KY003 sensor!");
     }

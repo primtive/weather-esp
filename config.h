@@ -4,13 +4,13 @@
 #define DEBUG true
 #define SERIAL_SPEED 115200
 
-const char *ssid = "REPLACE_WITH_YOUR_SSID";                      // Wifi SSID
-const char *password = "REPLACE_WITH_YOUR_PASSWORD";              // Wifi Пароль
-const char *serverName = "http://weather.orenbio.ru/api/weather"; // API URL
+#define WIFI_SSID "Hello"                                  // Wifi SSID
+#define WIFI_PASSWORD "12348765"                           // Wifi Пароль
+#define SERVER_URL "http://weather.orenbio.ru/api/weather" // API URL
 
 #define ENS160_ADDRESS 0x52      // Датчик качества воздуха
-#define HOME_BME280_ADDRESS 0x76 // Датчик температуры, влажности, давления (дома)
-#define EXT_BME280_ADDRESS 0x77  // Датчик температуры, влажности, давления (на улице)
+#define HOME_BME280_ADDRESS 0x77 // Датчик температуры, влажности, давления (дома)
+#define EXT_BME280_ADDRESS 0x76  // Датчик температуры, влажности, давления (на улице)
 #define MT6701_ADDRESS 0x06      // Датчик направления ветра
 #define ANGLE_MSB_REG 0x03       // Датчик направления ветра (регистр)
 #define ANGLE_LSB_REG 0x04       // Датчик направления ветра (регистр)
