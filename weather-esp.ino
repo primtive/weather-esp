@@ -93,7 +93,7 @@ void postData()
     doc["tvoc"] = qualitySensor.getTVOC();
     doc["eco2"] = qualitySensor.getECO2();
     doc["light"] = lightSensor.getLight();
-    doc["wind_dir"] = windDirectionSensor.getDirection();
+    doc["wind_dir"] = windDirectionSensor.getAngle();
     doc["wind_speed"] = windSpeedSensor.getSpeed();
     doc["rain"] = rainSensor.getRainLevel();
     char requestBody[256];
