@@ -13,6 +13,7 @@ public:
     bool init(uint8_t address);
     void update();
     uint8_t getAQI();
+    String getAQIName();
     uint16_t getTVOC();
     uint16_t getECO2();
     void getDebugInfo();
@@ -105,6 +106,7 @@ class RainSensor
 public:
     RainSensor(uint8_t pin);
     uint16_t getRainLevel();
+    String getRainLevelName();
     void getDebugInfo();
 
 private:

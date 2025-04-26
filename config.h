@@ -27,9 +27,10 @@
 #define TEMT6000_LUX 1000.0     // Коофициент яркости
 #define KY003_CIRCUMFERENCE 1.0 // Коофициент датчика скорости ветра
 #define MT6701_OFFSET 0         // Смещение поворота энкодера (в градусах)
+#define RAIN_LEVEL 500          // Уровень дождя для определения как ДА
 
 #define START_MODE 0          // Режим отображения по умолчанию (0 - дом, 1 - улица)
 #define UPDATE_INTERVAL 10000 // 10 сек
-#define API_INTERVAL 600000   // 10 мин
+#define API_INTERVAL 60000    // 10 мин
 
 #endif

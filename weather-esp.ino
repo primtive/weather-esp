@@ -29,47 +29,59 @@ void drawInfoOutside()
   lcd.setCursor(0, 0);
   lcd.print("Outside:");
   lcd.setCursor(0, 1);
-  lcd.print(extEnvSensor.getTemperature());
-  lcd.print("°C ");
-  lcd.print(extEnvSensor.getHumidity());
+  lcd.print((int)round(extEnvSensor.getTemperature()));
+  lcd.print((char)223);
+  lcd.print("C ");
+  lcd.print((int)round(extEnvSensor.getHumidity()));
   lcd.print("% ");
-  lcd.print(extEnvSensor.getPressure());
-  lcd.print("hpa");
+  lcd.print((int)round(extEnvSensor.getPressure()));
+  lcd.print("hPa");
   lcd.setCursor(0, 2);
   lcd.print("Wind: ");
   lcd.print(windDirectionSensor.getDirection());
   lcd.print(" ");
-  lcd.print(windSpeedSensor.getSpeed());
+  lcd.print((int)round(windSpeedSensor.getSpeed()));
   lcd.print("m/s");
   lcd.setCursor(0, 3);
   lcd.print("Rain: ");
-  lcd.print(rainSensor.getRainLevel());
-  lcd.print(" ");
+  lcd.print(rainSensor.getRainLevelName());
+  lcd.print(" | ");
   lcd.print(lightSensor.getLight());
-  lcd.print("lx");
+  lcd.print(" lx");
 }
 
 void drawInfoHome()
 {
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Home:");
+  lcd.print("Inside:");
   lcd.setCursor(0, 1);
-  lcd.print(homeEnvSensor.getTemperature());
-  lcd.print("°C ");
-  lcd.print(homeEnvSensor.getHumidity());
+  lcd.print((int)round(homeEnvSensor.getTemperature()));
+  lcd.print((char)223);
+  lcd.print("C ");
+  lcd.print((int)round(homeEnvSensor.getHumidity()));
   lcd.print("% ");
-  lcd.print(homeEnvSensor.getPressure());
-  lcd.print("hpa");
+  lcd.print((int)round(homeEnvSensor.getPressure()));
+  lcd.print(" hPa");
   lcd.setCursor(0, 2);
-  lcd.print("AQI:");
-  lcd.print(qualitySensor.getAQI());
-  lcd.print(" TVOC: ");
-  lcd.print(qualitySensor.getTVOC());
-  lcd.print(" ppb");
-  lcd.setCursor(0, 3);
   lcd.print("eCO2: ");
   lcd.print(qualitySensor.getECO2());
+  lcd.print(" ppm");
+  lcd.setCursor(0, 3);
+  lcd.print("AQI: ");
+  lcd.print(qualitySensor.getAQIName());
+}
+
+void drawInfo()
+{
+  if (mode)
+  {
+    drawInfoOutside();
+  }
+  else
+  {
+    drawInfoHome();
+  }
 }
 
 void postData()
@@ -189,11 +201,13 @@ void loop()
   if (button.click())
   {
     mode = !mode;
+    drawInfo();
   }
 
   if (currentMillis - updateTimer >= UPDATE_INTERVAL)
   {
     updateTimer = currentMillis;
+    mode = !mode;
 
     qualitySensor.update();
     windDirectionSensor.update();
@@ -211,14 +225,7 @@ void loop()
       rainSensor.getDebugInfo();
     }
 
-    if (mode)
-    {
-      drawInfoOutside();
-    }
-    else
-    {
-      drawInfoHome();
-    }
+    drawInfo();
   }
 
   if (currentMillis - apiTimer >= API_INTERVAL)

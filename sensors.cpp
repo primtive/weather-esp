@@ -7,10 +7,12 @@
 // ENS160 method implementations
 ENS160::ENS160() : _initialized(false) {}
 
-bool ENS160::init(uint8_t address) {
+bool ENS160::init(uint8_t address)
+{
     _address = address;
 
-    if (!sensor.begin(_address)) {
+    if (!sensor.begin(_address))
+    {
         if (DEBUG)
             Serial.println("Could not communicate with the ENS160, check wiring.");
         return false;
@@ -21,7 +23,8 @@ bool ENS160::init(uint8_t address) {
     sensor.setOperatingMode(SFE_ENS160_STANDARD);
     _initialized = true;
 
-    if (DEBUG) {
+    if (DEBUG)
+    {
         _status = sensor.getFlags();
         Serial.print("ENS 160: ready, status - ");
         Serial.println(getStatusName(_status));
@@ -29,16 +32,23 @@ bool ENS160::init(uint8_t address) {
     return true;
 }
 
-String ENS160::getStatusName(uint8_t ensStatus) {
-    switch (ensStatus) {
-        case 0: return "Standard";
-        case 1: return "Warm up";
-        case 2: return "Initial Start Up";
-        default: return "Unknown";
+String ENS160::getStatusName(uint8_t ensStatus)
+{
+    switch (ensStatus)
+    {
+    case 0:
+        return "Standard";
+    case 1:
+        return "Warm up";
+    case 2:
+        return "Initial Start Up";
+    default:
+        return "Unknown";
     }
 }
 
-void ENS160::update() {
+void ENS160::update()
+{
     if (!_initialized || !sensor.checkDataStatus())
         return;
     _AQI = sensor.getAQI();
@@ -47,11 +57,23 @@ void ENS160::update() {
 }
 
 uint8_t ENS160::getAQI() { return _AQI; }
+String ENS160::getAQIName()
+{
+    switch (_AQI)
+    {
+    case 1:
+        return "OK";
+    default:
+        return "BAD";
+    }
+}
 uint16_t ENS160::getTVOC() { return _TVOC; }
 uint16_t ENS160::getECO2() { return _ECO2; }
 
-void ENS160::getDebugInfo() {
-    if (!_initialized) return;
+void ENS160::getDebugInfo()
+{
+    if (!_initialized)
+        return;
 
     _status = sensor.getFlags();
     Serial.println("=== Качество воздуха ===");
@@ -70,40 +92,49 @@ void ENS160::getDebugInfo() {
 // MT6701 method implementations
 MT6701::MT6701() : _initialized(false) {}
 
-bool MT6701::init(uint8_t address) {
+bool MT6701::init(uint8_t address)
+{
     _address = address;
     _initialized = true;
     Wire.beginTransmission(_address);
     return Wire.endTransmission() == 0;
 }
 
-String MT6701::getDirectionName(float angle) {
+String MT6701::getDirectionName(float angle)
+{
     angle = fmod(angle, 360.0);
-    if (angle < 0) angle += 360.0;
+    if (angle < 0)
+        angle += 360.0;
 
     const char *directions[] = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
     int index = ((int)(angle + 22.5) / 45) % 8;
     return directions[index];
 }
 
-void MT6701::update() {
+void MT6701::update()
+{
     Wire.beginTransmission(MT6701_ADDRESS);
     Wire.write(ANGLE_MSB_REG);
     Wire.endTransmission(false);
     Wire.requestFrom(MT6701_ADDRESS, 2);
 
-    if (Wire.available() == 2) {
+    if (Wire.available() == 2)
+    {
         uint8_t msb = Wire.read();
         uint8_t lsb = Wire.read();
         uint16_t rawAngle = ((msb << 6) | (lsb & 0x3F));
         float angle = (float)rawAngle * 360.0 / 16384.0;
         angle += MT6701_OFFSET;
 
-        if (angle < 0) angle += 360.0;
-        if (angle >= 360.0) angle -= 360.0;
+        if (angle < 0)
+            angle += 360.0;
+        if (angle >= 360.0)
+            angle -= 360.0;
         _angle = angle;
         _direction = getDirectionName(_angle);
-    } else if (DEBUG) {
+    }
+    else if (DEBUG)
+    {
         Serial.println("Ошибка чтения с MT6701");
     }
 }
@@ -111,8 +142,10 @@ void MT6701::update() {
 uint16_t MT6701::getAngle() { return _angle; }
 String MT6701::getDirection() { return _direction; }
 
-void MT6701::getDebugInfo() {
-    if (!_initialized) return;
+void MT6701::getDebugInfo()
+{
+    if (!_initialized)
+        return;
     Serial.println("=== Направление ветра ===");
     Serial.print("Угол: ");
     Serial.print(_angle, 1);
@@ -123,20 +156,24 @@ void MT6701::getDebugInfo() {
 // TEMT6000 method implementations
 TEMT6000::TEMT6000() : _initialized(false) {}
 
-bool TEMT6000::init(uint8_t pin) {
+bool TEMT6000::init(uint8_t pin)
+{
     pinMode(pin, INPUT);
     _initialized = true;
     return true;
 }
 
-uint16_t TEMT6000::getLight() {
+uint16_t TEMT6000::getLight()
+{
     int raw = analogRead(TEMT6000_PIN);
     float lux = raw * (TEMT6000_LUX / 4095.0);
     return lux;
 }
 
-void TEMT6000::getDebugInfo() {
-    if (!_initialized) return;
+void TEMT6000::getDebugInfo()
+{
+    if (!_initialized)
+        return;
     float lux = this->getLight();
     Serial.println("=== Датчик света ===");
     Serial.print("Освещенность: ");
@@ -147,24 +184,27 @@ void TEMT6000::getDebugInfo() {
 // BME280 method implementations
 BME280::BME280() : _initialized(false) {}
 
-bool BME280::init(uint8_t address) {
-    if (!bme.begin(address)) {
+bool BME280::init(uint8_t address)
+{
+    if (!bme.begin(address))
+    {
         if (DEBUG)
             Serial.println("Could not find a valid BME280 sensor, check wiring!");
         return false;
     }
 
     bme.setSampling(Adafruit_BME280::MODE_NORMAL,
-                   Adafruit_BME280::SAMPLING_X2,
-                   Adafruit_BME280::SAMPLING_X16,
-                   Adafruit_BME280::SAMPLING_X1,
-                   Adafruit_BME280::FILTER_OFF,
-                   Adafruit_BME280::STANDBY_MS_0_5);
+                    Adafruit_BME280::SAMPLING_X2,
+                    Adafruit_BME280::SAMPLING_X16,
+                    Adafruit_BME280::SAMPLING_X1,
+                    Adafruit_BME280::FILTER_OFF,
+                    Adafruit_BME280::STANDBY_MS_0_5);
     _initialized = true;
     return true;
 }
 
-void BME280::update() {
+void BME280::update()
+{
     _temperature = bme.readTemperature();
     _humidity = bme.readHumidity();
     _pressure = bme.readPressure() / 100.0;
@@ -174,8 +214,10 @@ float BME280::getTemperature() { return _temperature; }
 float BME280::getHumidity() { return _humidity; }
 float BME280::getPressure() { return _pressure; }
 
-void BME280::getDebugInfo() {
-    if (!_initialized) return;
+void BME280::getDebugInfo()
+{
+    if (!_initialized)
+        return;
     Serial.println("=== BME280 ===");
     Serial.print("Температура: ");
     Serial.print(_temperature, 1);
@@ -189,52 +231,64 @@ void BME280::getDebugInfo() {
 }
 
 // KY003 method implementations
-KY003* KY003::_instance = nullptr;
+KY003 *KY003::_instance = nullptr;
 const unsigned long KY003::DEBOUNCE_TIME = 10000;
 
-KY003::KY003() {
+KY003::KY003()
+{
     _instance = this;
 }
 
-void KY003::init(uint8_t pin) {
+void KY003::init(uint8_t pin)
+{
     _pin = pin;
     pinMode(_pin, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(_pin), handleInterrupt, FALLING);
     _lastPulseTime = micros();
 }
 
-void KY003::handleInterruptInstance() {
+void KY003::handleInterruptInstance()
+{
     unsigned long currentTime = micros();
-    if (currentTime - _lastPulseTime > DEBOUNCE_TIME) {
+    if (currentTime - _lastPulseTime > DEBOUNCE_TIME)
+    {
         _pulseInterval = currentTime - _lastPulseTime;
         _lastPulseTime = currentTime;
         _pulseCount++;
     }
 }
 
-void KY003::handleInterrupt() {
-    if (_instance) {
+void KY003::handleInterrupt()
+{
+    if (_instance)
+    {
         _instance->handleInterruptInstance();
     }
 }
 
-float KY003::getSpeed() const {
-    if (_pulseInterval == 0) return 0.0;
+float KY003::getSpeed() const
+{
+    if (_pulseInterval == 0)
+        return 0.0;
     float timeBetweenPulses_sec = _pulseInterval / 1000000.0;
     return KY003_CIRCUMFERENCE / timeBetweenPulses_sec;
 }
 
-float KY003::getRotationFrequency() const {
-    if (_pulseInterval == 0) return 0.0;
+float KY003::getRotationFrequency() const
+{
+    if (_pulseInterval == 0)
+        return 0.0;
     return 1000000.0 / _pulseInterval;
 }
 
 unsigned int KY003::getPulseCount() const { return _pulseCount; }
 void KY003::resetPulseCount() { _pulseCount = 0; }
 
-void KY003::getDebugInfo() {
+void KY003::getDebugInfo()
+{
     unsigned long currentTime = millis();
-    if (currentTime - _lastMeasurementTime < 1000) return;
+    if (currentTime - _lastMeasurementTime < 1000)
+        return;
 
     _lastMeasurementTime = currentTime;
     float speed = getSpeed();
@@ -253,16 +307,30 @@ void KY003::getDebugInfo() {
 }
 
 // RainSensor method implementations
-RainSensor::RainSensor(uint8_t pin) : _pin(pin) {
+RainSensor::RainSensor(uint8_t pin) : _pin(pin)
+{
     pinMode(_pin, INPUT);
 }
 
-uint16_t RainSensor::getRainLevel() {
-    return analogRead(_pin);
+uint16_t RainSensor::getRainLevel()
+{
+    int raw = analogRead(_pin);
+    float level = raw * (1000.0 / 4095.0);
+    return (int)level;
 }
 
-void RainSensor::getDebugInfo() {
+String RainSensor::getRainLevelName()
+{
+    uint16_t level = this->getRainLevel();
+    if (level >= RAIN_LEVEL)
+        return "yes";
+    else
+        return "no";
+}
+
+void RainSensor::getDebugInfo()
+{
     Serial.println("=== Уровень дождя ===");
-    Serial.print("Уровень (ADC): ");
+    Serial.print("Уровень: ");
     Serial.println(this->getRainLevel());
 }
