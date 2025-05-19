@@ -283,6 +283,7 @@ float KY003::getRotationFrequency() const
 
 unsigned int KY003::getPulseCount() const { return _pulseCount; }
 void KY003::resetPulseCount() { _pulseCount = 0; }
+void KY003::resetPulseInterval() { _pulseInterval = 0; }
 
 void KY003::getDebugInfo()
 {
@@ -315,7 +316,7 @@ RainSensor::RainSensor(uint8_t pin) : _pin(pin)
 uint16_t RainSensor::getRainLevel()
 {
     int raw = analogRead(_pin);
-    float level = raw * (1000.0 / 4095.0);
+    float level = 1000.0 - raw * (1000.0 / 4095.0);
     return (int)level;
 }
 

@@ -87,6 +87,7 @@ public:
     float getRotationFrequency() const;
     unsigned int getPulseCount() const;
     void resetPulseCount();
+    void resetPulseInterval();
     void getDebugInfo();
 
 private:

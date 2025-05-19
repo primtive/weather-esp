@@ -40,8 +40,8 @@ void drawInfoOutside()
   lcd.print("Wind: ");
   lcd.print(windDirectionSensor.getDirection());
   lcd.print(" ");
-  lcd.print((int)round(windSpeedSensor.getSpeed()));
-  lcd.print("m/s");
+  lcd.print(round(windSpeedSensor.getSpeed()));
+  lcd.print(" m/s");
   lcd.setCursor(0, 3);
   lcd.print("Rain: ");
   lcd.print(rainSensor.getRainLevelName());
@@ -108,6 +108,10 @@ void postData()
     doc["wind_dir"] = windDirectionSensor.getAngle();
     doc["wind_speed"] = windSpeedSensor.getSpeed();
     doc["rain"] = rainSensor.getRainLevel();
+
+    windSpeedSensor.resetPulseInterval();
+    windSpeedSensor.resetPulseCount();
+
     char requestBody[256];
     serializeJson(doc, requestBody);
     int httpResponseCode = http.POST(requestBody);
@@ -136,6 +140,9 @@ void setup()
   Wire.begin();
   lcd.init();
   lcd.backlight();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Inside:");
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
