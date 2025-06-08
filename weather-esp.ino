@@ -142,7 +142,7 @@ void setup()
   lcd.backlight();
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Inside:");
+  lcd.print("Connecting...");
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
