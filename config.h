@@ -4,8 +4,8 @@
 #define DEBUG true
 #define SERIAL_SPEED 115200
 
-#define WIFI_SSID "Hello"                                  // Wifi SSID
-#define WIFI_PASSWORD "12348765"                           // Wifi Пароль
+#define WIFI_SSID "akim"                                  // Wifi SSID
+#define WIFI_PASSWORD "QAZ12qaz"                           // Wifi Пароль
 #define SERVER_URL "http://weather.orenbio.ru/api/weather" // API URL
 
 #define ENS160_ADDRESS 0x52      // Датчик качества воздуха
@@ -24,13 +24,13 @@
 #define BUTTON_MODE INPUT_PULLUP // - режим работы (умолч. INPUT_PULLUP)
 #define BUTTON_LEVEL LOW         // - уровень кнопки (умолч. LOW)
 
-#define TEMT6000_LUX 1600.0     // Коофициент яркости
+#define TEMT6000_LUX 0.7     // Коофициент яркости
 #define KY003_CIRCUMFERENCE 1.0 // Коофициент датчика скорости ветра
-#define MT6701_OFFSET 0         // Смещение поворота энкодера (в градусах)
+#define MT6701_OFFSET 30         // Смещение поворота энкодера (в градусах)
 #define RAIN_LEVEL 500          // Уровень дождя для определения как ДА
 
 #define START_MODE 0          // Режим отображения по умолчанию (0 - дом, 1 - улица)
-#define UPDATE_INTERVAL 10000 // 10 сек
-#define API_INTERVAL 60000    // 1 мин
+#define UPDATE_INTERVAL 8000 // 10 сек
+#define API_INTERVAL 300000    // 5 мин
 
 #endif

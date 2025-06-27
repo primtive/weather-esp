@@ -130,7 +130,9 @@ void MT6701::update()
             angle += 360.0;
         if (angle >= 360.0)
             angle -= 360.0;
-        _angle = angle;
+        _angle = 360.0 - angle;
+        if (_angle >= 360.0)
+            _angle -= 360.0;
         _direction = getDirectionName(_angle);
     }
     else if (DEBUG)
@@ -166,7 +168,8 @@ bool TEMT6000::init(uint8_t pin)
 uint16_t TEMT6000::getLight()
 {
     int raw = analogRead(TEMT6000_PIN);
-    float lux = raw * (TEMT6000_LUX / 4095.0);
+    float voltage = raw * (5.0 / 4095.0);
+    float lux = voltage * 1000.0 * TEMT6000_LUX;
     return lux;
 }
 
@@ -175,10 +178,12 @@ void TEMT6000::getDebugInfo()
     if (!_initialized)
         return;
     float lux = this->getLight();
+    int raw = this->getLight();
     Serial.println("=== Датчик света ===");
     Serial.print("Освещенность: ");
     Serial.print(lux, 1);
     Serial.println(" лк");
+    Serial.print(analogRead(TEMT6000_PIN));
 }
 
 // BME280 method implementations
@@ -205,7 +210,7 @@ bool BME280::init(uint8_t address)
 
 void BME280::update()
 {
-    _temperature = bme.readTemperature();
+    _temperature = bme.readTemperature()-1.5;
     _humidity = bme.readHumidity();
     _pressure = bme.readPressure() / 100.0;
 }
