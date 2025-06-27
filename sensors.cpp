@@ -210,12 +210,12 @@ bool BME280::init(uint8_t address)
 
 void BME280::update()
 {
-    _temperature = bme.readTemperature()-1.5;
+    _temperature = bme.readTemperature();
     _humidity = bme.readHumidity();
     _pressure = bme.readPressure() / 100.0;
 }
 
-float BME280::getTemperature() { return _temperature; }
+float BME280::getTemperature() { return _temperature - 1.5; }
 float BME280::getHumidity() { return _humidity; }
 float BME280::getPressure() { return _pressure; }
 
