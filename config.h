@@ -4,7 +4,7 @@
 #define DEBUG true
 #define SERIAL_SPEED 115200
 
-#define WIFI_SSID "akim"                                  // Wifi SSID
+#define WIFI_SSID "akim"                                   // Wifi SSID
 #define WIFI_PASSWORD "QAZ12qaz"                           // Wifi Пароль
 #define SERVER_URL "http://weather.orenbio.ru/api/weather" // API URL
 
@@ -18,19 +18,22 @@
 
 #define TEMT6000_PIN 34 // Датчик освещенности (аналоговый)
 #define RAIN_PIN 32     // Датчик дождя (аналоговый)
-#define KY003_PIN 35     // Датчик холла (ветер) (цифровой)
+#define KY003_PIN 35    // Датчик холла (ветер) (цифровой)
 
 #define BUTTON_PIN 3             // Кнопка для управления
 #define BUTTON_MODE INPUT_PULLUP // - режим работы (умолч. INPUT_PULLUP)
 #define BUTTON_LEVEL LOW         // - уровень кнопки (умолч. LOW)
 
-#define TEMT6000_LUX 0.7     // Коофициент яркости
+#define TEMT6000_LUX 0.7        // Коофициент яркости
 #define KY003_CIRCUMFERENCE 1.0 // Коофициент датчика скорости ветра
-#define MT6701_OFFSET 30         // Смещение поворота энкодера (в градусах)
+#define MT6701_OFFSET 30        // Смещение поворота энкодера (в градусах)
 #define RAIN_LEVEL 500          // Уровень дождя для определения как ДА
 
-#define START_MODE 0          // Режим отображения по умолчанию (0 - дом, 1 - улица)
+#define BME280_TEMP_OFFSET -2 // Смещение температуры
+#define BME280_PRES_OFFSET 11.8 // Смещение давления
+
+#define START_MODE 0         // Режим отображения по умолчанию (0 - дом, 1 - улица)
 #define UPDATE_INTERVAL 8000 // 10 сек
-#define API_INTERVAL 300000    // 5 мин
+#define API_INTERVAL 300000  // 5 мин
 
 #endif
