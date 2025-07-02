@@ -208,11 +208,28 @@ bool BME280::init(uint8_t address)
     return true;
 }
 
+void BME280::calculatePressureAtAltitude(float seaLevelPressure, float altitude)
+{
+    const double temperatureLapseRate = 0.0065;  // Градиент температуры (K/m)
+    const double standardTemp = 288.15;          // Стандартная температура на уровне моря (K)
+    const double gravity = 9.80665;              // Ускорение свободного падения (m/s^2)
+    const double molarMass = 0.0289644;          // Молярная масса сухого воздуха (kg/mol)
+    const double universalGasConstant = 8.31447; // Универсальная газовая постоянная (J/(mol·K))
+
+    // Рассчитываем давление по барометрической формуле
+    double pressureAtAltitude = seaLevelPressure *
+                                pow(1 - (temperatureLapseRate * altitude) / standardTemp,
+                                    (gravity * molarMass) / (universalGasConstant * temperatureLapseRate));
+
+    return pressureAtAltitude;
+}
+
 void BME280::update()
 {
     _temperature = bme.readTemperature() + BME280_TEMP_OFFSET;
     _humidity = bme.readHumidity();
-    _pressure = bme.readPressure() / 100.0 + BME280_PRES_OFFSET;
+    _sea_level_pressure = bme.readPressure() / 100.0;
+    _pressure = calculatePressureAtAltitude(_sea_level_pressure, SEA_LEVEL_ALT);
 }
 
 float BME280::getTemperature() { return _temperature; }

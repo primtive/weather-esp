@@ -29,8 +29,8 @@
 #define MT6701_OFFSET 30        // Смещение поворота энкодера (в градусах)
 #define RAIN_LEVEL 500          // Уровень дождя для определения как ДА
 
-#define BME280_TEMP_OFFSET -2 // Смещение температуры
-#define BME280_PRES_OFFSET 11.8 // Смещение давления
+#define BME280_TEMP_OFFSET -1.5 // Смещение температуры
+#define SEA_LEVEL_ALT 100.0 // Высота над уровнем моря
 
 #define START_MODE 0         // Режим отображения по умолчанию (0 - дом, 1 - улица)
 #define UPDATE_INTERVAL 8000 // 10 сек

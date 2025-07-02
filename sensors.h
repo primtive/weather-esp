@@ -72,9 +72,11 @@ public:
 
 private:
     Adafruit_BME280 bme;
+    float calculatePressureAtAltitude(float seaLevelPressure, float altitude);
     float _temperature;
     float _humidity;
     float _pressure;
+    float _sea_level_pressure;
     bool _initialized;
 };
 
