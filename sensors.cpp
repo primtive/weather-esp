@@ -217,9 +217,9 @@ float BME280::calculatePressureAtAltitude(float seaLevelPressure, float altitude
     const float universalGasConstant = 8.31447; // Универсальная газовая постоянная (J/(mol·K))
 
     // Рассчитываем давление по барометрической формуле
-    float pressureAtAltitude = seaLevelPressure *
-                                pow(1 - (temperatureLapseRate * altitude) / standardTemp,
-                                    (gravity * molarMass) / (universalGasConstant * temperatureLapseRate));
+    float pressureAtAltitude = seaLevelPressure * (1 /
+                                                   pow(1 - (temperatureLapseRate * altitude) / standardTemp,
+                                                       (gravity * molarMass) / (universalGasConstant * temperatureLapseRate)));
 
     return pressureAtAltitude;
 }
