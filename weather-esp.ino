@@ -9,7 +9,7 @@
 
 ENS160 qualitySensor;
 MT6701 windDirectionSensor;
-TEMT6000 lightSensor;
+VEML7700 lightSensor;
 BME280 homeEnvSensor;
 BME280 extEnvSensor;
 KY003 windSpeedSensor;
@@ -139,7 +139,7 @@ void setup()
   analogReadResolution(12);
   Wire.begin();
   lcd.init();
-  lcd.backlight();
+  // lcd.backlight();
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Connecting...");
@@ -170,9 +170,9 @@ void setup()
       Serial.println("Failed to initialize MT6701 sensor!");
     }
 
-    if (!lightSensor.init(TEMT6000_PIN))
+    if (!lightSensor.init())
     {
-      Serial.println("Failed to initialize TEMT6000 sensor!");
+      Serial.println("Failed to initialize VEML7700 sensor!");
     }
 
     if (!homeEnvSensor.init(HOME_BME280_ADDRESS))
@@ -194,7 +194,7 @@ void setup()
   {
     qualitySensor.init(ENS160_ADDRESS);
     windDirectionSensor.init(MT6701_ADDRESS);
-    lightSensor.init(TEMT6000_PIN);
+    lightSensor.init();
     homeEnvSensor.init(HOME_BME280_ADDRESS);
     extEnvSensor.init(EXT_BME280_ADDRESS);
     windSpeedSensor.init(KY003_PIN);

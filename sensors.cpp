@@ -1,5 +1,6 @@
 #include "SparkFun_ENS160.h"
 #include <Adafruit_BME280.h>
+#include "Adafruit_VEML7700.h"
 #include <Wire.h>
 #include "config.h"
 #include "sensors.h"
@@ -155,35 +156,30 @@ void MT6701::getDebugInfo()
     Serial.println(_direction);
 }
 
-// TEMT6000 method implementations
-TEMT6000::TEMT6000() : _initialized(false) {}
+// VEML7700 method implementations
+VEML7700::VEML7700() : _initialized(false) {}
 
-bool TEMT6000::init(uint8_t pin)
+bool VEML7700::init()
 {
-    pinMode(pin, INPUT);
-    _initialized = true;
-    return true;
+    _initialized = sensor.begin();
+    return _initialized;
 }
 
-uint16_t TEMT6000::getLight()
+uint16_t VEML7700::getLight()
 {
-    int raw = analogRead(TEMT6000_PIN);
-    float voltage = raw * (5.0 / 4095.0);
-    float lux = voltage * 1000.0 * TEMT6000_LUX;
+    uint16_t lux = sensor.readLux();
     return lux;
 }
 
-void TEMT6000::getDebugInfo()
+void VEML7700::getDebugInfo()
 {
     if (!_initialized)
         return;
-    float lux = this->getLight();
-    int raw = this->getLight();
+    uint16_t lux = this->getLight();
     Serial.println("=== Датчик света ===");
     Serial.print("Освещенность: ");
     Serial.print(lux, 1);
     Serial.println(" лк");
-    Serial.print(analogRead(TEMT6000_PIN));
 }
 
 // BME280 method implementations

@@ -5,6 +5,7 @@
 #include <Wire.h>
 #include <Adafruit_BME280.h>
 #include "SparkFun_ENS160.h"
+#include "Adafruit_VEML7700.h"
 
 class ENS160
 {
@@ -47,15 +48,16 @@ private:
     String getDirectionName(float angle);
 };
 
-class TEMT6000
+class VEML7700
 {
 public:
-    TEMT6000();
-    bool init(uint8_t pin);
+    VEML7700();
+    bool init();
     uint16_t getLight();
     void getDebugInfo();
 
 private:
+    Adafruit_VEML7700 sensor;
     bool _initialized;
 };
 
